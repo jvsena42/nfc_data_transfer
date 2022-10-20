@@ -3,12 +3,11 @@ package com.bulletapps.nfcdatatransfer
 import android.nfc.NdefMessage
 import android.nfc.NdefRecord
 import android.nfc.NfcAdapter
+import android.nfc.NfcEvent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import java.nio.charset.Charset
-import java.util.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), NfcAdapter.CreateNdefMessageCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -41,4 +40,8 @@ class MainActivity : AppCompatActivity() {
             NdefRecord.createApplicationRecord(packageName)
         )
     )
+
+    override fun createNdefMessage(p0: NfcEvent?): NdefMessage {
+        return (createMessage(createTextRecord("Android é top")))
+    }
 }
