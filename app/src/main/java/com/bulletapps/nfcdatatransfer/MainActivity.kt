@@ -24,18 +24,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-    fun createTextRecord(payload: String, locale: Locale, encodeInUtf8: Boolean): NdefRecord {
-        val langBytes = locale.language.toByteArray(Charset.forName("US-ASCII"))
-        val utfEncoding = if (encodeInUtf8) Charset.forName("UTF-8") else Charset.forName("UTF-16")
-        val textBytes = payload.toByteArray(utfEncoding)
-        val utfBit: Int = if (encodeInUtf8) 0 else 1 shl 7
-        val status = (utfBit + langBytes.size).toChar()
-        val data = ByteArray(1 + langBytes.size + textBytes.size)
-        data[0] = status.toByte()
-        System.arraycopy(langBytes, 0, data, 1, langBytes.size)
-        System.arraycopy(textBytes, 0, data, 1 + langBytes.size, textBytes.size)
-        return NdefRecord(NdefRecord.TNF_WELL_KNOWN, NdefRecord.RTD_TEXT, ByteArray(0), data)
-    }
 
     fun createTextRecord(payload: String): NdefRecord {
         return NdefRecord.createTextRecord(
@@ -43,4 +31,14 @@ class MainActivity : AppCompatActivity() {
             payload
         )
     }
+
+    fun createMessage(
+        messageRecord: NdefRecord,
+        packageName: String = applicationContext.packageName
+    ) = NdefMessage(
+        arrayOf(
+            messageRecord,
+            NdefRecord.createApplicationRecord(packageName)
+        )
+    )
 }
