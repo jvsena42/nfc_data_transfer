@@ -25,14 +25,14 @@ class MainActivity : AppCompatActivity(), NfcAdapter.CreateNdefMessageCallback {
         }
     }
 
-    fun createTextRecord(payload: String): NdefRecord {
+    private fun createTextRecord(payload: String): NdefRecord {
         return NdefRecord.createTextRecord(
             "pt-BR", // TODO handle language code
             payload
         )
     }
 
-    fun createMessage(
+    private fun createMessage(
         messageRecord: NdefRecord,
         packageName: String = applicationContext.packageName
     ) = NdefMessage(
